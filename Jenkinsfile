@@ -6,11 +6,7 @@ pipeline {
     }
 
     stages {
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/thotamanikanta/ci-cd-testing.git'
-            }
-        }
+        
 
         stage('Build Frontend') {
             steps {
