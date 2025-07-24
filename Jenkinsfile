@@ -2,62 +2,47 @@ pipeline {
     agent any
 
     environment {
-        VM_HOST = 'user@your-vm-ip'       // Replace with actual SSH user and IP
-        SSH_KEY_ID = 'vm-ssh-key'         // Jenkins SSH credential ID
+        DEPLOY_SCRIPT = './deploy.sh'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clone Code') {
             steps {
-                git 'https://github.com/your-org/your-project.git'
+                git 'https://github.com/thotamanikanta/ci-cd-testing.git'
             }
         }
 
         stage('Build Frontend') {
-            dir('frontend') {
-                steps {
+            steps {
+                dir('frontend') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
             }
         }
 
-        stage('Test Backend') {
-            dir('backend') {
-                steps {
-                    sh 'pip install -r requirements.txt'
-                    sh 'python manage.py test'
+        stage('Collect Django Static Files') {
+            steps {
+                dir('backend') {
+                    sh 'pip install -r ../requirements.txt'
+                    sh 'python3 manage.py collectstatic --noinput'
                 }
             }
         }
 
-        stage('Deploy to VM') {
+        stage('Deploy to Target VM') {
             steps {
-                sshagent([env.SSH_KEY_ID]) {
-                    sh """
-                    echo "📦 Copying frontend build to VM..."
-                    scp -r ./frontend/build ${VM_HOST}:/var/www/frontend/
-
-                    echo "📦 Copying backend code to VM..."
-                    scp -r ./backend ${VM_HOST}:/home/user/project/
-
-                    echo "📦 Copying deployment script..."
-                    scp ./deploy.sh ${VM_HOST}:/home/user/deploy.sh
-
-                    echo "🚀 Running deployment script on VM..."
-                    ssh ${VM_HOST} 'chmod +x /home/user/deploy.sh && bash /home/user/deploy.sh'
-                    """
-                }
+                sh "${DEPLOY_SCRIPT}"
             }
         }
     }
 
     post {
         success {
-            echo "✅ CI/CD pipeline completed successfully!"
+            echo '✅ Deployment successful!'
         }
         failure {
-            echo "❌ Pipeline failed!"
+            echo '❌ Deployment failed.'
         }
     }
 }

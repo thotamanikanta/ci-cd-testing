@@ -1,23 +1,32 @@
 #!/bin/bash
 
-echo "🚀 Starting deployment on VM..."
+# Fail if any command fails
+set -e
 
-# Backend setup
-cd ~/project/backend || exit
+# Set vars
+TARGET_USER="root"                # Change this to your VM2 username
+TARGET_HOST="10.0.1.54"
+TARGET_FRONTEND_DIR="/var/www/frontend"
+TARGET_BACKEND_DIR="/usr/share/project/backend"
 
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
-fi
+echo "🔧 Building React app..."
+cd frontend
+npm install
+npm run build
+cd ..
 
-source venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py collectstatic --noinput
+echo "🧹 Collecting Django static files..."
+cd backend
+pip install -r ../requirements.txt
+python3 manage.py collectstatic --noinput
+cd ..
 
-sudo systemctl restart gunicorn
+echo "🚀 Deploying to $TARGET_HOST..."
 
-# Frontend setup
-sudo rm -rf /var/www/html/*
-sudo cp -r /var/www/frontend/* /var/www/html/
+# Copy frontend build and backend project
+scp -r frontend/build ${TARGET_USER}@${TARGET_HOST}:${TARGET_FRONTEND_DIR}
+scp -r backend ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
+scp deploy.sh ${TARGET_USER}@${TARGET_HOST}:/home/${TARGET_USER}/deploy.sh
 
-echo "✅ Deployment finished!"
+echo "▶️ Running remote deploy script..."
+ssh ${TARGET_USER}@${TARGET_HOST} 'chmod +x ~/deploy.sh && bash ~/deploy.sh'
