@@ -9,25 +9,25 @@ TARGET_HOST="10.0.1.54"
 TARGET_FRONTEND_DIR="/var/www/frontend"
 TARGET_BACKEND_DIR="/usr/share/backend"
 
-echo "🔧 Building React app..."
-cd frontend
-npm install
-npm run build
-cd ..
+# echo "🔧 Building React app..."
+# cd frontend
+# npm install
+# npm run build
+# cd ..
 
 
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
-fi
+# if [ ! -d "venv" ]; then
+#     python3 -m venv venv
+# fi
 
-source venv/bin/activate
-echo "🧹 Collecting Django static files..."
+# source venv/bin/activate
+# echo "🧹 Collecting Django static files..."
 
-pip install -r requirements.txt
-cd backend
-python manage.py makemigrations
-python manage.py migrate 
-cd ..
+# pip install -r requirements.txt
+# cd backend
+# python manage.py makemigrations
+# python manage.py migrate 
+# cd ..
 echo "🚀 Deploying to $TARGET_HOST..."
 
 # Copy frontend build and backend project
