@@ -35,6 +35,7 @@ pipeline {
 
         stage('Deploy to Target VM') {
             steps {
+                sh "chmod +x ${DEPLOY_SCRIPT}h"
                 sh "${DEPLOY_SCRIPT}"
             }
         }
