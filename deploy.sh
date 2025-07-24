@@ -24,8 +24,8 @@ source venv/bin/activateecho "🧹 Collecting Django static files..."
 
 pip install -r requirements.txt
 cd backend
-python manage.py migrate
-python manage.py collectstatic --noinput
+python manage.py makemigrations
+python manage.py migrate 
 cd ..
 echo "🚀 Deploying to $TARGET_HOST..."
 
