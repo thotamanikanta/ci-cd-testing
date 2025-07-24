@@ -31,12 +31,14 @@ cd ..
 echo "🚀 Deploying to $TARGET_HOST..."
 
 # Copy frontend build and backend project
-ssh ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
-ssh ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
 
-scp -r frontend/build ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
-scp -r backend ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
-scp deploy.sh ${TARGET_USER}@${TARGET_HOST}:/home/${TARGET_USER}/deploy.sh
+
+ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
+ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
+
+scp -o StrictHostKeyChecking=no -r frontend/build ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
+scp -o StrictHostKeyChecking=no -r backend ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
+scp -o StrictHostKeyChecking=no deploy.sh ${TARGET_USER}@${TARGET_HOST}:/home/${TARGET_USER}/deploy.sh
 
 echo "▶️ Running remote deploy script..."
-ssh ${TARGET_USER}@${TARGET_HOST} 'chmod +x ~/deploy.sh && bash ~/deploy.sh'
+ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} 'chmod +x ~/deploy.sh && bash ~/deploy.sh'
