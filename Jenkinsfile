@@ -20,8 +20,14 @@ pipeline {
         stage('Collect Django Static Files') {
             steps {
                 dir('backend') {
-                    sh 'pip install -r ../requirements.txt'
-                    sh 'python3 manage.py collectstatic --noinput'
+                    
+                    sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install --upgrade pip
+                        pip install -r ../requirements.txt
+                        python3 manage.py collectstatic --noinput
+                        '''
                 }
             }
         }

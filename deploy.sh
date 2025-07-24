@@ -15,12 +15,18 @@ npm install
 npm run build
 cd ..
 
-echo "🧹 Collecting Django static files..."
-cd backend
-pip install -r ../requirements.txt
-python3 manage.py collectstatic --noinput
-cd ..
 
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
+
+source venv/bin/activateecho "🧹 Collecting Django static files..."
+
+pip install -r requirements.txt
+cd backend
+python manage.py migrate
+python manage.py collectstatic --noinput
+cd ..
 echo "🚀 Deploying to $TARGET_HOST..."
 
 # Copy frontend build and backend project
