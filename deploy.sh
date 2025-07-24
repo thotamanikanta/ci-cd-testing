@@ -37,7 +37,7 @@ ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET
 ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
 scp -o StrictHostKeyChecking=no -r frontend/dist ${TARGET_USER}@${TARGET_HOST}:${TARGET_FRONTEND_DIR}
 scp -o StrictHostKeyChecking=no -r backend ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
-scp -o StrictHostKeyChecking=no deploy.sh ${TARGET_USER}@${TARGET_HOST}:/home/${TARGET_USER}/deploy.sh
+# scp -o StrictHostKeyChecking=no deploy.sh ${TARGET_USER}@${TARGET_HOST}:/home/${TARGET_USER}/deploy.sh
 
-echo "▶️ Running remote deploy script..."
-ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} 'chmod +x ~/deploy.sh && bash ~/deploy.sh'
+# echo "▶️ Running remote deploy script..."
+# ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} 'chmod +x ~/deploy.sh && bash ~/deploy.sh'
