@@ -20,7 +20,8 @@ if [ ! -d "venv" ]; then
     python3 -m venv venv
 fi
 
-source venv/bin/activateecho "🧹 Collecting Django static files..."
+source venv/bin/activate
+echo "🧹 Collecting Django static files..."
 
 pip install -r requirements.txt
 cd backend
