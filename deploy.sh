@@ -35,8 +35,7 @@ echo "🚀 Deploying to $TARGET_HOST..."
 
 ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
 ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
-ssh -o StrictHostKeyChecking=no ${TARGET_USER}@${TARGET_HOST} "mkdir -p ${TARGET_FRONTEND_DIR}"
-scp -o StrictHostKeyChecking=no -r frontend ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
+scp -o StrictHostKeyChecking=no -r frontend/dist ${TARGET_USER}@${TARGET_HOST}:${TARGET_FRONTEND_DIR}
 scp -o StrictHostKeyChecking=no -r backend ${TARGET_USER}@${TARGET_HOST}:${TARGET_BACKEND_DIR}
 scp -o StrictHostKeyChecking=no deploy.sh ${TARGET_USER}@${TARGET_HOST}:/home/${TARGET_USER}/deploy.sh
 
